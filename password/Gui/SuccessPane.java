@@ -3,6 +3,9 @@ package password.Gui;
 import javax.swing.*;
 import java.io.IOException;
 
+/**
+ * Classe usata per generare {@link JOptionPane} per segnalare successi
+ */
 public class SuccessPane {
 
     public static void accessGranted(JFrame f) throws IOException {

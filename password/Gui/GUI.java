@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * Menu Principale
+ */
 public class GUI extends JFrame {
 
     private final JFrame f = this;

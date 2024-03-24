@@ -3,6 +3,9 @@ package password.Gui;
 import javax.swing.*;
 import java.io.IOException;
 
+/**
+ * Classe usata per generare {@link JOptionPane} per segnalare errori
+ */
 public class ErrorPanes {
 
     public static void errorPane(String err, JFrame f) {
@@ -29,6 +32,10 @@ public class ErrorPanes {
     public static void accessDenied(JFrame f) {
         JOptionPane.showMessageDialog(f,"Hai esaurito i tentativi della password. Il programma verrà terminato","Tentativi Esauriti",JOptionPane.ERROR_MESSAGE);
         f.dispose();
+    }
+
+    public static void fileNotWrittenCorrectly(JFrame f) {
+        JOptionPane.showMessageDialog(f,"File Non Correttamente Salvato","File Error",JOptionPane.ERROR_MESSAGE);
     }
 
 }

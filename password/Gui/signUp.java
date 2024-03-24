@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+/**
+ * Menu del SignUp
+ */
 public class signUp extends JFrame {
     private JFrame f = this;
     private final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();

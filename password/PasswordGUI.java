@@ -4,33 +4,40 @@ import password.Gui.ErrorPanes;
 import password.Gui.SuccessPane;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 public class PasswordGUI {
-    public static String realPw;
-    public static File DB = new File("./database.txt");
+    public static PasswordObj realPw;
+    public static File DB = new File("./database.dat");
     public static int i = 0;
 
+    /**
+     * Metodo logico usato per il controllo della password
+     * @param pw Stringa in entrata per essere controllata
+     * @param f JFrame per generare {@link ErrorPanes}
+     */
     public static void login(String pw, JFrame f) {
         System.out.println(pw);
         if (!DB.isFile()) {
             ErrorPanes.fileNotFoundPane("Impossibile Trovare Il Database", f);
             return;
         }
+        if (pw.isEmpty()) {
+            ErrorPanes.pwEmptyErr(f);
+            return;
+        }
         try {
-            if (pw.isEmpty()) {
-                ErrorPanes.pwEmptyErr(f);
-                return;
-            }
-            Scanner fr = new Scanner(DB);
-            realPw = fr.nextLine();
+            FileInputStream fis = new FileInputStream(DB);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            realPw = (PasswordObj) ois.readObject();
             i++;
-            if (realPw.equals(pw)) {
+            if (realPw.toString().equals(pw)) {
                 if (i != 5) {
                     System.out.println("ACCESSO CONSENTITO");
+                    fis.close();
+                    ois.close();
                     SuccessPane.accessGranted(f);
                 } else {
                     ErrorPanes.accessDenied(f);
@@ -45,15 +52,21 @@ public class PasswordGUI {
                 }
 
             }
-        } catch (IOException err) {
+        } catch (IOException | ClassNotFoundException err) {
             ErrorPanes.fileNotFoundPane(err.getMessage(), f);
             throw new RuntimeException(err);
         }
     }
 
-    public static void signUp(String pw, JFrame f) {
-        System.out.println(pw);
-        if (pw.isEmpty()) {
+    /**
+     * Metodo logico usato per la scrittura di una password in un file
+     * @param password Password da associare al PasswordObj
+     * @param f JFrame per generare ErrorPanes
+     */
+    public static void signUp(String password, JFrame f) {
+        System.out.println(password);
+        PasswordObj pw = new PasswordObj(password);
+        if (password.isEmpty()) {
             ErrorPanes.pwEmptyErr(f);
             return;
         }
@@ -66,15 +79,29 @@ public class PasswordGUI {
             }
         }
         try {
-            FileWriter fw = new FileWriter(DB);
-            fw.write(pw);
-            fw.close();
-            Scanner fr = new Scanner(DB);
-            if (fr.nextLine().equals(pw)){
-                SuccessPane.fileCorrectlyWritten(f);
+            FileOutputStream fos = new FileOutputStream(DB);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
 
+            oos.writeObject(pw);
+            oos.close();
+            fos.close();
+
+            FileInputStream fis = new FileInputStream(DB);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
+            PasswordObj object = (PasswordObj) ois.readObject();
+
+            System.out.println(object.toString());
+
+            fis.close();
+            ois.close();
+
+            if (object.toString().equals(pw.toString())){
+                SuccessPane.fileCorrectlyWritten(f);
+            } else {
+                ErrorPanes.fileNotWrittenCorrectly(f);
             }
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             ErrorPanes.errorPane(e.getMessage(),f);
             throw new RuntimeException(e);
         }
