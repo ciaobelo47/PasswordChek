@@ -25,6 +25,9 @@ public class ErrorPanes {
     public static void pwEmptyErr(JFrame f) {
         JOptionPane.showMessageDialog(f,"Inserisci una password","Empty Password",JOptionPane.ERROR_MESSAGE);
     }
+    public static void userEmptyErr(JFrame f) {
+        JOptionPane.showMessageDialog(f, "Inserisci un username", "Empty Username", JOptionPane.ERROR_MESSAGE);
+    }
     public static void wrongPw(JFrame f) {
         JOptionPane.showMessageDialog(f,"Password Errata. Riprova.","Password Errata",JOptionPane.ERROR_MESSAGE);
     }

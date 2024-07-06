@@ -5,10 +5,9 @@ import password.Gui.SuccessPane;
 
 import javax.swing.*;
 import java.io.*;
-import java.util.Scanner;
 
 public class PasswordGUI {
-    public static PasswordObj realPw;
+    public static User realPw;
     public static File DB = new File("./database.dat");
     public static int i = 0;
 
@@ -17,10 +16,15 @@ public class PasswordGUI {
      * @param pw Stringa in entrata per essere controllata
      * @param f JFrame per generare {@link ErrorPanes}
      */
-    public static void login(String pw, JFrame f) {
-        System.out.println(pw);
+    public static void login(String usr, String pw, JFrame f) {
+        User u = new User(usr, pw);
+
         if (!DB.isFile()) {
             ErrorPanes.fileNotFoundPane("Impossibile Trovare Il Database", f);
+            return;
+        }
+        if (usr.isEmpty()) {
+            ErrorPanes.userEmptyErr(f);
             return;
         }
         if (pw.isEmpty()) {
@@ -31,9 +35,9 @@ public class PasswordGUI {
             FileInputStream fis = new FileInputStream(DB);
             ObjectInputStream ois = new ObjectInputStream(fis);
 
-            realPw = (PasswordObj) ois.readObject();
+            realPw = (User) ois.readObject();
             i++;
-            if (realPw.toString().equals(pw)) {
+            if (realPw.toString().equals(u.toString())) {
                 if (i != 5) {
                     System.out.println("ACCESSO CONSENTITO");
                     fis.close();
@@ -60,12 +64,13 @@ public class PasswordGUI {
 
     /**
      * Metodo logico usato per la scrittura di una password in un file
-     * @param password Password da associare al PasswordObj
+     * @param password Password da associare al User
      * @param f JFrame per generare ErrorPanes
      */
-    public static void signUp(String password, JFrame f) {
-        System.out.println(password);
-        PasswordObj pw = new PasswordObj(password);
+    public static void signUp(String username, String password, JFrame f) {
+        System.out.println("[Debug] Username recieved: " + username);
+        System.out.println("[Debug] Password recieved: " + password);
+        User pw = new User(username, password);
         if (password.isEmpty()) {
             ErrorPanes.pwEmptyErr(f);
             return;
@@ -89,7 +94,7 @@ public class PasswordGUI {
             FileInputStream fis = new FileInputStream(DB);
             ObjectInputStream ois = new ObjectInputStream(fis);
 
-            PasswordObj object = (PasswordObj) ois.readObject();
+            User object = (User) ois.readObject();
 
             System.out.println(object.toString());
 

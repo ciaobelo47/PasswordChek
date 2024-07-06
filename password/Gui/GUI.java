@@ -31,7 +31,7 @@ public class GUI extends JFrame {
         this.add(okPanel(),"South");
         this.add(mainPanel(),"Center");
         this.setVisible(true);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
     }
 
