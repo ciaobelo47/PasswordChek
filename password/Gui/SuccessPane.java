@@ -11,7 +11,13 @@ public class SuccessPane {
     public static void accessGranted(JFrame f) throws IOException {
         JOptionPane.showMessageDialog(f,"Accesso Consentito! Benvenuto!", "Accesso Consentito!",JOptionPane.INFORMATION_MESSAGE);
         Runtime runtime = Runtime.getRuntime();
-        Process process = runtime.exec("mspaint");
+//        Process process = runtime.exec("mspaint");
+        System.out.println(System.getProperty("os.name"));
+        if (System.getProperty("os.name").contains("Windows")) {
+            Process process = runtime.exec("mspaint");
+        } else if (System.getProperty("os.name").contains("Linux")) {
+            Process process = runtime.exec("firefox");
+        }
         f.dispose();
     }
 
